@@ -44,7 +44,7 @@ struct ContentView: View {
                                     )
                                     Divider()
                                 }
-                                .foregroundColor(isDaytime ? .black : .white)
+                                .foregroundColor(isDaytime ? .black :.white )
                                 .background(Color.clear)
                             }
                         }
@@ -71,7 +71,7 @@ struct ContentView: View {
                 }
             }
             .padding()
-            .foregroundStyle(isDaytime ? .white : .black)
+            .foregroundStyle(isDaytime ? .black : .white)
             .background(
                 Image(isDaytime ? "morning" : "night")
                     .resizable()

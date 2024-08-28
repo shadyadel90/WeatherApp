@@ -13,8 +13,7 @@ class WeatherViewModel: ObservableObject {
     @Published var weatherArray: weatherInfo?
     
     func fetchWeather() {
-        NetworkService.fetchData { [weak self] weather in
-            
+        NetworkService.fetchData(Constants.ApiUrl) { [weak self] weather,error in
             
             DispatchQueue.main.async {
                 self?.weatherArray = weather
