@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var weatherArray: weatherInfo?
+    @StateObject private var viewModel = WeatherViewModel()
     
     var isDaytime: Bool {
         let hour = Calendar.current.component(.hour, from: Date())
@@ -18,7 +18,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                if let weather = weatherArray {
+                if let weather = viewModel.weatherArray {
                     Spacer()
                     BasicInfo(
                         name: weather.location.name,
@@ -37,7 +37,7 @@ struct ContentView: View {
                             NavigationLink(destination: Details(allDay: dayForecast.hour)) {
                                 VStack {
                                     threeDaysList(
-                                        day: "\(dayForecast.date_epoch)", 
+                                        day: "\(dayForecast.date_epoch)",
                                         icon: "https:\(dayForecast.day.condition.icon)",
                                         htemp: "\(Int(dayForecast.day.maxtemp_c))",
                                         mtemp: "\(Int(dayForecast.day.mintemp_c))"
@@ -66,7 +66,6 @@ struct ContentView: View {
                     
                     Spacer()
                 } else {
-                  
                     Text("Loading...")
                         .foregroundColor(.gray)
                 }
@@ -79,12 +78,8 @@ struct ContentView: View {
                     .scaledToFill()
                     .ignoresSafeArea()
             )
-        }
-        .onAppear {
-            NetworkService.fetchData { weather in
-                DispatchQueue.main.async {
-                    self.weatherArray = weather
-                }
+            .onAppear {
+                viewModel.fetchWeather()
             }
         }
     }
