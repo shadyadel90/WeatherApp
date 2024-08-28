@@ -34,7 +34,7 @@ struct ContentView: View {
                         Spacer().frame(height: 4)
                         Divider()
                         ForEach(weather.forecast.forecastday.prefix(3), id: \.date) { dayForecast in
-                            NavigationLink(destination: Details()) {
+                            NavigationLink(destination: Details(allDay: dayForecast.hour)) {
                                 VStack {
                                     threeDaysList(
                                         day: "\(dayForecast.date_epoch)", 
