@@ -50,7 +50,7 @@ struct forecasts: Codable {
     let forecastday: [forecast]
 }
 
-struct weatherInfo: Codable,Identifiable {
+struct weatherInfo: Codable {
     let location: Location
     let current: current
     let forecast: forecasts
