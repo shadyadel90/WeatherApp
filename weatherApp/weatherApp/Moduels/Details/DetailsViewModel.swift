@@ -10,6 +10,11 @@ import Foundation
 class DetailsViewModel: ObservableObject {
     @Published var filteredForecasts: [hour] = []
     
+    var isDaytime: Bool {
+        let hour = Calendar.current.component(.hour, from: Date())
+        return hour >= 6 && hour < 18
+    }
+    
     func filterForecasts(allDay: [hour]) {
         guard !allDay.isEmpty else { return }
         

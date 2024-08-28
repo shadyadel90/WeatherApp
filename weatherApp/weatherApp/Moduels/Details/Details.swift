@@ -51,7 +51,7 @@ struct Details: View {
             Spacer()
         }
         .background(
-            Image("morning")
+            Image(viewModel.isDaytime ? "morning" : "night")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .edgesIgnoringSafeArea(.all)

@@ -6,30 +6,57 @@
 //
 
 import XCTest
+@testable import weatherApp
 
 final class weatherAppTests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+       
     }
+    
+    // Test: Successful Network Call
+     func testNetwork_Success() {
+         let expectation = self.expectation(description: "Waiting for successful fetch")
+         
+         NetworkService.fetchData(Constants.ApiUrl) { weather, error in
+             XCTAssertNil(error, "Expected no error, but got \(String(describing: error))")
+             XCTAssertNotNil(weather, "Expected weather data, but got nil")
+             
+             XCTAssertEqual(weather?.location.name, "Cairo", "Expected location name to be 'Cairo'")
+             
+             expectation.fulfill()
+         }
+         
+         wait(for: [expectation], timeout: 1)
+     }
+     
+     // Test: Handle Network Error
+     func testNetwork_ErrorHandling() {
+         let expectation = self.expectation(description: "Waiting for error handling")
+         
+         // Temporarily alter the API key to induce an error
+         let invalidAPIKey = "invalid_key"
+         let api = "https://api.weatherapi.com/v1/forecast.json?key=\(invalidAPIKey)&q=30.0444,31.2357&days=3&aqi=no&alerts=no"
+         
+         guard URL(string: api) != nil else {
+             XCTFail("Failed to create URL with invalid API key")
+             return
+         }
+         
+         NetworkService.fetchData(api) { weather, error in
+             XCTAssertNotNil(error, "Expected error, but got nil")
+             XCTAssertNil(weather, "Expected no weather data, but got \(String(describing: weather))")
+             
+             expectation.fulfill()
+         }
+         
+         wait(for: [expectation], timeout: 1)
+     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
+   
 
 }
